@@ -76,18 +76,27 @@ export class HUD {
       this.trainer.innerHTML = ''
       const avatar = el('img', { class: 'trainer-avatar pixel-sprite', alt: 'trainer' })
       avatar.src = app.playerAvatarUrl()
+      this.trainerRegion = el('div', { class: 'trainer-region' })
       const info = el('div', { class: 'trainer-copy' }, [
         el('div', { class: 'trainer-line' }, [
           el('strong', {}, p.name),
           el('span', { class: 'trainer-lv' }, `Lv.${p.trainerLevel}`),
         ]),
         el('div', { class: 'trainer-title-line' }, trainerTitle(p.trainerLevel)),
+        this.trainerRegion,
         el('div', { class: 'trainer-sub' }, [
           el('span', { class: 'money' }, `◈ ${p.money.toLocaleString()}`),
           el('span', { class: 'badges' }, `${Object.values(state.flags.bosses).filter(Boolean).length} / 8 guardians`),
         ]),
       ])
       this.trainer.append(avatar, info)
+    }
+
+    // Compact region + clock line, shown inside the trainer card on phones.
+    const regionLineKey = `${biome.id}|${Math.floor(state.time.minutes / 5)}|${p.money}`
+    if (this.trainerRegion && this.last.regionLineKey !== regionLineKey) {
+      this.last.regionLineKey = regionLineKey
+      this.trainerRegion.textContent = `${formatTime(state.time.minutes)} ${night ? '☾' : '·'} ${biome.name.split(' ')[0]}`
     }
 
     const regionKey = `${biome.id}|${night}`
@@ -166,7 +175,7 @@ export class HUD {
     // Hint
     const near = app.near
     let hintText = 'WASD / Arrows to move · E to interact'
-    let hintIcon = '⌁'
+    let hintIcon = '➜'
     if (app.uiBlocked) hintText = ''
     else if (near) {
       const e = near.entity

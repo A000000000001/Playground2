@@ -926,7 +926,7 @@ export class Screens {
   openHelp() {
     const content = el('div', { class: 'help-screen' }, [
       el('div', { class: 'help-grid' }, [
-        helpCard('⌁', 'Explore', 'Walk into wild monsters to start an encounter, or press E near NPCs, resources, guardians and signposts.'),
+        helpCard('➜', 'Explore', 'Walk into wild monsters to start an encounter, or press E near NPCs, resources, guardians and signposts.'),
         helpCard('◉', 'Catch', 'Weaken a monster, inflict status, then throw the best orb you own. Capture chance is shown on every orb.'),
         helpCard('⚔', 'Battle', 'Skills cost energy; basic attacks are free. Elements are strong and weak against each other. Switch monsters freely.'),
         helpCard('✦', 'Evolve', 'Monsters evolve by level, friendship, location or special items. Some species have branching paths.'),
