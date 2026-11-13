@@ -260,11 +260,11 @@ export class GameApp {
     content.append(grid)
 
     startBtn.style.width = '100%'
-    content.append(el('div', { class: 'row end' }, [startBtn]))
     openModal({
       title: 'A New Journey',
       subtitle: 'The garden remembers every name. What will it call you?',
       icon: '❧', body: content, size: 'large',
+      footer: el('div', { class: 'row end', style: { width: '100%' } }, [startBtn]),
     })
   }
 
@@ -283,7 +283,7 @@ export class GameApp {
 
   showTitleHelp() {
     const body = el('div', { class: 'help-grid' }, [
-      helpCard('⌁', 'Explore', 'Use WASD or the arrow keys. Shift runs. Walk into wild monsters to start an encounter, or press E near people and sparkles to interact.'),
+      helpCard('➜', 'Explore', 'Use WASD or the arrow keys. Shift runs. Walk into wild monsters to start an encounter, or press E near people and sparkles to interact.'),
       helpCard('◉', 'Catch', 'Weaken a monster, inflict a status, then throw an orb. The catch screen shows the real percentage before you commit.'),
       helpCard('⚔', 'Battle', 'Skills cost energy; Tackle is always free. Elements beat elements. Switch monsters whenever you need to.'),
       helpCard('✦', 'Grow', 'Monsters evolve by level, friendship, location or rare items. Check a monster\'s detail page for its evolution path.'),
@@ -354,7 +354,7 @@ export class GameApp {
         ]),
       ]),
       el('div', { class: 'help-grid' }, [
-        helpCard('⌁', 'Move', 'WASD / arrows. Shift runs. On mobile use the pad at the lower-left.'),
+        helpCard('➜', 'Move', 'WASD / arrows. Shift runs. On mobile use the pad at the lower-left.'),
         helpCard('E', 'Interact', 'Talk, gather, challenge Guardians or start a wild battle.'),
         helpCard('P · B · C', 'Party · Bag · Codex', 'Your three most-used screens are always one key away.'),
         helpCard('✎', 'First steps', 'Walk into a wild monster to battle it. Visit the golden “!” in Mossglow Village for your first quest.'),
@@ -368,8 +368,9 @@ export class GameApp {
       footer: button('Step outside', () => {
         closeModal()
         this.afterChange()
-        toast({ title: 'Greenwood Forest', text: 'WASD / arrows to move · E to interact', icon: '❧', tone: 'region' })
-      }, { variant: 'primary', icon: '⌁' }),
+        const touch = window.matchMedia?.('(pointer: coarse)').matches
+        toast({ title: 'Greenwood Forest', text: touch ? 'Use the pad to move · tap ACTION to interact' : 'WASD / arrows to move · E to interact', icon: '❧', tone: 'region' })
+      }, { variant: 'primary', icon: '➜' }),
     })
   }
 
@@ -424,7 +425,7 @@ export class GameApp {
     if (this.mode !== 'game' || this.battleUI || isModalOpen()) return
     const near = this.near || this.world.nearestInteraction()
     if (!near) {
-      toast({ title: 'Nothing within reach', text: 'Walk closer to a person, sparkle or monster.', icon: '⌁' })
+      toast({ title: 'Nothing within reach', text: 'Walk closer to a person, sparkle or monster.', icon: '➜' })
       return
     }
     const entity = near.entity
@@ -769,7 +770,7 @@ export class GameApp {
     this.actionBtn.addEventListener('pointerleave', clear)
     const menu = el('button', { class: 'mobile-menu-btn', 'aria-label': 'Menu' }, '☰')
     menu.addEventListener('click', () => this.openMenu())
-    actionPad.append(this.actionBtn, el('div', { class: 'mobile-hint' }, 'MOVE · ACT'), menu)
+    actionPad.append(this.actionBtn, menu)
 
     wrap.append(dpad, actionPad)
     return wrap

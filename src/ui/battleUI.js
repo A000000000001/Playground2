@@ -172,8 +172,8 @@ export class BattleUI {
 
     this.enemyName.textContent = enemy.nickname || eSp.name
     this.enemyLv.textContent = `Lv.${enemy.level}`
-    this.enemyHpText.textContent = `${Math.max(0, Math.ceil(enemy.hp))} HP`
-    this.enemyHpMax.textContent = `/ ${eMax}`
+    this.enemyHpText.textContent = `${Math.max(0, Math.ceil(enemy.hp))} / ${eMax}`
+    this.enemyHpMax.textContent = 'HP'
     this.enemyHpFill.style.width = `${Math.max(0, enemy.hp / Math.max(1, eMax)) * 100}%`
     this.enemyHpFill.className = `battle-hp-fill ${enemy.hp / eMax < 0.22 ? 'bad' : enemy.hp / eMax < 0.5 ? 'warn' : ''}`
     this.enemyMeta.innerHTML = ''
@@ -182,8 +182,8 @@ export class BattleUI {
 
     this.playerName.textContent = active.nickname
     this.playerLv.textContent = `Lv.${active.level}`
-    this.playerHpText.textContent = `${Math.max(0, Math.ceil(active.hp))} HP`
-    this.playerHpMax.textContent = `/ ${pMax}`
+    this.playerHpText.textContent = `${Math.max(0, Math.ceil(active.hp))} / ${pMax}`
+    this.playerHpMax.textContent = 'HP'
     this.playerHpFill.style.width = `${Math.max(0, active.hp / Math.max(1, pMax)) * 100}%`
     this.playerHpFill.className = `battle-hp-fill ${active.hp / pMax < 0.22 ? 'bad' : active.hp / pMax < 0.5 ? 'warn' : ''}`
     this.playerMeta.innerHTML = ''
@@ -373,6 +373,7 @@ export class BattleUI {
       return
     }
     const list = el('div', { class: 'battle-list battle-subpanel' })
+    this.panelEl.append(el('div', { class: 'small-note' }, 'Tap an orb to throw it. Weakening the monster and inflicting a status improves your odds.'))
     for (const option of options) {
       const chance = Math.round(option.chance * 100)
       list.append(el('button', {
@@ -381,10 +382,9 @@ export class BattleUI {
       }, [
         el('span', { class: 'item-icon', style: { '--item-color': option.item.color, width: '28px', height: '28px', flexBasis: '28px', fontSize: '13px' } }, '◉'),
         el('span', {}, [el('strong', {}, option.item.name), el('span', {}, `${chance}% chance · ${getMonster(this.battle.enemy.speciesId).name}`)]),
-        el('span', { class: 'count-pill' }, `×${option.count}`),
+        el('span', { class: 'count-pill throw' }, `×${option.count} · Throw`),
       ]))
     }
-    this.panelEl.append(el('div', { class: 'small-note' }, 'Weaken the monster and inflict a status to improve your odds.'))
     this.panelEl.append(list)
   }
 
