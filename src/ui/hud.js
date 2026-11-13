@@ -56,7 +56,7 @@ export class HUD {
       this.hint,
       this.lead,
     ])
-    this.root.append(top, this.dock, bottom)
+    this.root.append(top, el('div', { class: 'hud-spacer' }), this.dock, bottom)
   }
 
   update() {
@@ -194,15 +194,16 @@ export class HUD {
         const img = el('img', { class: 'lead-sprite pixel-sprite' })
         img.src = monsterSprite(lead.speciesId).toDataURL()
         const pct = lead.hp / maxHpOf(lead)
-        this.lead.append(
+        const leadChildren = [
           img,
           el('div', { class: 'lead-copy' }, [
             el('strong', {}, lead.nickname),
             el('span', {}, `Lv.${lead.level} · ${getMonster(lead.speciesId).name}`),
             el('div', { class: 'lead-hp' }, [el('div', { style: { width: pct * 100 + '%', background: pct > 0.5 ? '#78d9a4' : pct > 0.22 ? '#ffd36e' : '#ff7a7a' } })]),
           ]),
-          lead.status ? el('span', { class: 'lead-status', style: { color: STATUS[lead.status].color } }, STATUS[lead.status].glyph) : null,
-        )
+        ]
+        if (lead.status) leadChildren.push(el('span', { class: 'lead-status', style: { color: STATUS[lead.status].color } }, STATUS[lead.status].glyph))
+        this.lead.append(...leadChildren)
       }
     }
   }

@@ -68,7 +68,9 @@ export const RECIPES = [
 ]
 
 export function getItem(id) {
-  return ITEMS[id] || { name: id, type: 'misc', desc: '', icon: '?' }
+  const item = ITEMS[id]
+  if (item) return item.id ? item : { ...item, id }
+  return { id, name: id, type: 'misc', desc: '', icon: '?' }
 }
 
 export const SHOP_STOCK = [
