@@ -207,6 +207,8 @@ export class Battle {
     if (roll < chance) {
       this.log(`${getMonster(this.enemy.speciesId).name} was caught!`)
       const caught = this.enemy
+      caught.status = null
+      caught.statusTurns = 0
       caught.caughtAt = Date.now()
       caught.caughtBiome = this.biome
       caught.caughtNight = isNight(this.state.time.minutes)

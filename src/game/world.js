@@ -430,7 +430,7 @@ export class GameWorld {
       for (let x = 0; x < MAP_W; x++) {
         const i = y * MAP_W + x
         const terrain = this.terrainGrid[i]
-        const b = BIOMES[BIOME_ORDER[this.biomeGrid[i]]]
+        const b = BIOMES[BIOME_ORDER[this.biomeGrid[i]]] || BIOMES.forest
         let col = b.palette.ground
         if (terrain === T.OCEAN) col = '#1b3f5c'
         else if (terrain === T.WATER) col = '#356b8a'
@@ -687,7 +687,7 @@ export class GameWorld {
   }
 
   advanceEggs(steps) {
-    for (const m of this.state.party) {
+    for (const m of [...this.state.party, ...this.state.storage]) {
       if (!m.isEgg) continue
       m.hatchSteps = Math.max(0, m.hatchSteps - steps)
       if (m.hatchSteps <= 0 && !m.hatching) {
