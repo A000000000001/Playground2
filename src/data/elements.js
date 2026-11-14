@@ -12,6 +12,25 @@ export const ELEMENTS = {
   light:  { name: 'Light',   color: '#ffe27a', dark: '#96702a', light: '#fff8cc', glyph: '☀' },
   storm:  { name: 'Storm',   color: '#9db9ff', dark: '#39447f', light: '#dce6ff', glyph: '⚡' },
   dragon: { name: 'Dragon',  color: '#e8848c', dark: '#7b2d3a', light: '#ffc2c6', glyph: '✧' },
+  water:  { name: 'Water',   color: '#5fa9e8', dark: '#244c7a', light: '#c4e7ff', glyph: '❖' },
+  metal:  { name: 'Metal',   color: '#b7c3cf', dark: '#4b5968', light: '#e3edf5', glyph: '⬡' },
+}
+
+// Accept both legacy primary-element strings and species records with an optional
+// secondaryElement/elements field so old saves and catalog entries remain valid.
+export function elementTypes(monsterOrElements) {
+  const values = Array.isArray(monsterOrElements)
+    ? monsterOrElements
+    : monsterOrElements && typeof monsterOrElements === 'object'
+      ? (Array.isArray(monsterOrElements.elements)
+        ? monsterOrElements.elements
+        : [monsterOrElements.element, monsterOrElements.secondaryElement])
+      : [monsterOrElements]
+  return [...new Set(values.filter(element => element && ELEMENTS[element]))]
+}
+
+export function elementNames(monsterOrElements) {
+  return elementTypes(monsterOrElements).map(element => ELEMENTS[element].name).join(' / ')
 }
 
 export const ATTACK_CHART = {
