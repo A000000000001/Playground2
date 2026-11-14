@@ -17,6 +17,7 @@ export const MAP_H = 132
 export const WORLD_W = MAP_W * TILE
 export const WORLD_H = MAP_H * TILE
 
+const WILD_TARGET_PER_BIOME = 5
 const T = { GROUND: 0, PATH: 1, WATER: 2, LAVA: 3, BRIDGE: 4, PLAZA: 5, OCEAN: 6, ICE: 7, ASH: 8 }
 
 const LINKS = [
@@ -452,7 +453,7 @@ export class GameWorld {
     this.spawnBosses()
     this.spawnMythics()
     for (const b of BIOME_LIST) {
-      for (let i = 0; i < 3; i++) this.spawnWild(b.id)
+      for (let i = 0; i < WILD_TARGET_PER_BIOME; i++) this.spawnWild(b.id)
     }
   }
 
@@ -764,7 +765,7 @@ export class GameWorld {
   updateSpawns(dt) {
     for (const b of BIOME_LIST) {
       const count = this.wilds.filter(w => w.biome === b.id).length
-      if (count < 3) {
+      if (count < WILD_TARGET_PER_BIOME) {
         this.spawnTimers[b.id] = (this.spawnTimers[b.id] || 0) + dt
         if (this.spawnTimers[b.id] > 4) {
           this.spawnTimers[b.id] = 0
@@ -821,7 +822,7 @@ export class GameWorld {
     this.encounterCooldown = 2
     const b = BIOMES[wild.biome]
     setTimeout(() => {
-      if (this.wilds.filter(w => w.biome === wild.biome).length < 3) this.spawnWild(wild.biome)
+      if (this.wilds.filter(w => w.biome === wild.biome).length < WILD_TARGET_PER_BIOME) this.spawnWild(wild.biome)
     }, 3500)
   }
 
