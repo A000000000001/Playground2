@@ -848,15 +848,15 @@ export class GameApp {
     }, 900)
   }
 
-  // Phone browsers can suspend a tab without firing beforeunload. A light
-  // interval keeps exploration progress safe during long sessions.
+  // Phone browsers can suspend a tab without firing beforeunload. A periodic
+  // save keeps exploration progress safe during long sessions.
   startAutosave() {
     this.stopAutosave()
     this.saveInterval = setInterval(() => {
       if (this.mode === 'game' && this.state?.settings?.autosave && !this.battleUI && !isModalOpen()) {
         this.save()
       }
-    }, 20000)
+    }, 120000)
   }
 
   stopAutosave() {
