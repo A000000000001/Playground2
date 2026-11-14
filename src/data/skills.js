@@ -36,6 +36,7 @@ add(
   S('thorn_burst', 'Thorn Burst', 'nature', 'special', 85, 95, 20, 'Explodes a ring of thorns around the foe.'),
   S('bloom_heal', 'Bloom Heal', 'nature', 'status', 0, 100, 16, 'Restores 35% HP and clears status.', { heal: 0.35, cure: true }),
   S('petal_storm', 'Petal Storm', 'nature', 'special', 100, 88, 26, 'A beautiful, brutal whirl of petals.'),
+  S('pollen_dance', 'Pollen Dance', 'nature', 'special', 64, 95, 14, 'A swirling cloud of pollen that may lull the foe to sleep.', { status: { id: 'sleep', chance: 12 } }),
 
   // ── Flame ────────────────────────────────────────────────────────────────
   S('ember', 'Ember', 'flame', 'special', 46, 100, 8, 'A small flick of flame that may burn.', { status: { id: 'burn', chance: 15 } }),
@@ -45,6 +46,7 @@ add(
   S('smolder', 'Smolder', 'flame', 'status', 0, 90, 10, 'A smoldering glare that burns the foe.', { status: { id: 'burn', chance: 100 } }),
   S('inferno', 'Inferno', 'flame', 'special', 108, 85, 28, 'Engulfs the foe in an inferno. Often burns.', { status: { id: 'burn', chance: 50 } }),
   S('fire_spin', 'Fire Spin', 'flame', 'special', 55, 95, 11, 'Traps the foe in a spiral of fire.', { stat: { target: 'enemy', stat: 'spe', stages: -1 } }),
+  S('ash_blast', 'Ash Blast', 'flame', 'special', 68, 100, 14, 'A dense burst of hot ash that may burn.', { status: { id: 'burn', chance: 12 } }),
 
   // ── Frost ────────────────────────────────────────────────────────────────
   S('frost_shard', 'Frost Shard', 'frost', 'special', 46, 100, 8, 'A splinter of ice. May freeze.', { status: { id: 'freeze', chance: 8 } }),
@@ -54,6 +56,7 @@ add(
   S('chilling_song', 'Chilling Song', 'frost', 'status', 0, 95, 12, 'An eerie song that chills and slows.', { status: { id: 'freeze', chance: 20 }, stat: { target: 'enemy', stat: 'spe', stages: -1 } }),
   S('icicle_spear', 'Icicle Spear', 'frost', 'physical', 70, 100, 16, 'Strikes twice with jagged ice.', { multi: 2 }),
   S('frozen_heart', 'Frozen Heart', 'frost', 'status', 0, 100, 15, 'Calms the spirit, restoring 45% HP.', { heal: 0.45, cure: true }),
+  S('aurora_burst', 'Aurora Burst', 'frost', 'special', 70, 95, 16, 'A ribbon of polar light that may freeze.', { status: { id: 'freeze', chance: 10 } }),
 
   // ── Earth ────────────────────────────────────────────────────────────────
   S('pebble_toss', 'Pebble Toss', 'earth', 'special', 46, 100, 8, 'Hurls a cluster of sharp pebbles.'),
@@ -63,6 +66,7 @@ add(
   S('stone_skin', 'Stone Skin', 'earth', 'status', 0, 100, 12, 'Hardens the body, sharply raising Defense.', { stat: { target: 'self', stat: 'def', stages: 2 } }),
   S('geo_break', 'Geo Break', 'earth', 'physical', 102, 88, 27, 'Shatters the ground beneath the foe.'),
   S('sandstorm', 'Sandstorm', 'earth', 'status', 0, 100, 13, 'A blinding storm lowers the foe\'s accuracy.', { stat: { target: 'enemy', stat: 'acc', stages: -1 } }),
+  S('fault_line', 'Fault Line', 'earth', 'physical', 76, 95, 17, 'A sudden split in the ground catches the foe off guard.'),
 
   // ── Shadow ───────────────────────────────────────────────────────────────
   S('shadow_bolt', 'Shadow Bolt', 'shadow', 'special', 48, 100, 9, 'A dart of living darkness.'),
@@ -73,6 +77,7 @@ add(
   S('drain_essence', 'Drain Essence', 'shadow', 'special', 55, 100, 12, 'Steals life force and heals the user.', { drain: 0.5 }),
   S('nightmare', 'Nightmare', 'shadow', 'special', 92, 90, 22, 'Deals double damage to sleeping foes.', { sleepBonus: 2 }),
   S('toxic_spit', 'Toxic Spit', 'shadow', 'status', 0, 90, 9, 'Spits venom that badly poisons the foe.', { status: { id: 'poison', chance: 100 } }),
+  S('wraith_claw', 'Wraith Claw', 'shadow', 'physical', 72, 100, 15, 'A phantom claw rakes through the foe.', { crit: 0.12 }),
 
   // ── Light ────────────────────────────────────────────────────────────────
   S('spark', 'Spark', 'light', 'special', 46, 100, 8, 'A mote of radiant light.'),
@@ -82,6 +87,7 @@ add(
   S('dawn_blade', 'Dawn Blade', 'light', 'physical', 76, 100, 17, 'A blade formed from the first light of dawn.', { crit: 0.12 }),
   S('lullaby', 'Lullaby', 'light', 'status', 0, 70, 12, 'A gentle song that lulls the foe to sleep.', { status: { id: 'sleep', chance: 100 } }),
   S('solar_flare', 'Solar Flare', 'light', 'special', 102, 88, 26, 'A miniature sun bursts over the foe.'),
+  S('moonbeam', 'Moonbeam', 'light', 'special', 64, 100, 13, 'A cool ray of moonlight strikes the foe.'),
 
   // ── Storm ────────────────────────────────────────────────────────────────
   S('static_jolt', 'Static Jolt', 'storm', 'special', 46, 100, 8, 'A crackling jolt that may paralyze.', { status: { id: 'paralysis', chance: 15 } }),
@@ -91,6 +97,7 @@ add(
   S('volt_ring', 'Volt Ring', 'storm', 'status', 0, 90, 11, 'A ring of voltage paralyzes the foe.', { status: { id: 'paralysis', chance: 100 } }),
   S('tailwind', 'Tailwind', 'storm', 'status', 0, 100, 12, 'Rides the wind to sharply raise Speed.', { stat: { target: 'self', stat: 'spe', stages: 2 } }),
   S('gale_force', 'Gale Force', 'storm', 'special', 84, 100, 20, 'A focused hurricane. High crit rate.', { crit: 0.15 }),
+  S('thunderclap', 'Thunderclap', 'storm', 'special', 70, 95, 15, 'A thunderous strike that may paralyze.', { status: { id: 'paralysis', chance: 12 } }),
 
   // ── Dragon ───────────────────────────────────────────────────────────────
   S('dragon_breath', 'Dragon Breath', 'dragon', 'special', 55, 100, 10, 'A breath of ancient power. May paralyze.', { status: { id: 'paralysis', chance: 15 } }),
@@ -100,6 +107,7 @@ add(
   S('tail_swipe', 'Tail Swipe', 'dragon', 'physical', 58, 100, 10, 'A sweeping tail that lowers Defense.', { stat: { target: 'enemy', stat: 'def', stages: -1 } }),
   S('ancient_roar', 'Ancient Roar', 'dragon', 'status', 0, 100, 13, 'A terrifying roar weakens the foe.', { stat: [{ target: 'enemy', stat: 'atk', stages: -1 }, { target: 'enemy', stat: 'spa', stages: -1 }] }),
   S('draco_meteor', 'Draco Meteor', 'dragon', 'special', 125, 80, 34, 'Calls down a rain of draconic meteors.'),
+  S('scale_rend', 'Scale Rend', 'dragon', 'physical', 76, 95, 17, 'A spinning slash with razor-edged scales.'),
 )
 
 export const SKILL_LIST = Object.values(SKILLS)
