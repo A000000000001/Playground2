@@ -231,17 +231,12 @@ export class Screens {
           ]),
         ])
 
-        const moveRows = monster.moves.map((id, idx) => this.moveRow(id, idx, monster, render, true))
         const movesPanel = el('div', { class: 'panel-soft detail-block' }, [
           el('div', { class: 'block-head' }, [
-            el('h3', {}, 'Equipped Skills'),
-            el('span', { class: 'small-note' }, `${monster.moves.length} / 4 equipped`),
+            el('h3', {}, 'Battle Skills'),
+            el('span', { class: 'small-note' }, `${this.uniqueLearned(monster).length} available`),
           ]),
-          el('div', { class: 'move-list' }, moveRows),
-          el('details', { class: 'learned-details' }, [
-            el('summary', {}, `All learned skills (${monster.learned.length})`),
-            el('div', { class: 'move-list learned' }, this.uniqueLearned(monster).map(id => this.moveRow(id, monster.moves.indexOf(id), monster, render, false))),
-          ]),
+          el('div', { class: 'move-list' }, this.uniqueLearned(monster).map(id => this.moveRow(id))),
         ])
 
         const evoBlock = el('div', { class: 'panel-soft detail-block' }, [
@@ -296,7 +291,8 @@ export class Screens {
   }
 
   uniqueLearned(monster) {
-    return [...new Set(monster.learned)]
+    const ids = [...new Set([...(monster.learned || []), ...(monster.moves || [])])]
+    return ids.length ? ids : ['tackle']
   }
 
   passiveName(id) { return { overgrow: 'Overgrow', blaze: 'Blaze', torrent: 'Torrent', thick_hide: 'Thick Hide', sturdy: 'Sturdy', lucky: 'Lucky', swift: 'Swift', armored: 'Armored', mystic: 'Mystic', regenerator: 'Regenerator', nocturnal: 'Nocturnal', levitate: 'Levitate', predator: 'Predator', radiant: 'Radiant', ...{} }[id] || id.replace(/_/g, ' ') }
@@ -316,11 +312,10 @@ export class Screens {
     return map[id] || 'A rare and mysterious ability.'
   }
 
-  moveRow(id, index, monster, rerender, equipped) {
+  moveRow(id) {
     const skill = getSkill(id)
     const e = ELEMENTS[skill.element] || ELEMENTS.none
-    const isEquipped = monster.moves.includes(id)
-    const row = el('div', { class: `move-row ${isEquipped ? 'equipped' : ''}` }, [
+    return el('div', { class: 'move-row available' }, [
       el('span', { class: 'move-icon', style: { background: e.dark, color: e.color } }, e.glyph),
       el('div', { class: 'move-copy' }, [
         el('div', { class: 'move-name-row' }, [
@@ -330,18 +325,8 @@ export class Screens {
         ]),
         el('p', {}, skill.description),
       ]),
-      button(isEquipped ? 'Unequip' : 'Equip', () => {
-        if (isEquipped) {
-          if (monster.moves.length <= 1) return toast({ title: 'Keep one skill', text: 'A monster needs at least one skill equipped.', tone: 'warn' })
-          monster.moves = monster.moves.filter(x => x !== id)
-        } else {
-          if (monster.moves.length >= 4) return toast({ title: 'Skill slots full', text: 'Unequip a skill first.', tone: 'warn' })
-          monster.moves.push(id)
-        }
-        rerender()
-      }, { className: 'tiny', variant: isEquipped ? 'ghost' : 'primary' }),
+      chip('Available', 'soft'),
     ])
-    return row
   }
 
   evolutionRequirement(evo, sp) {
