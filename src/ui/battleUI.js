@@ -26,6 +26,10 @@ export class BattleUI {
     this.app = app
     this.config = config
     this.battle = new Battle(config)
+    this.displayHp = {
+      player: this.battle.active.hp,
+      enemy: this.battle.enemy.hp,
+    }
     this.kind = config.source?.kind || 'wild'
     this.biome = BIOMES[config.biome] || BIOMES.forest
     this.busy = true
@@ -143,11 +147,17 @@ export class BattleUI {
   }
 
   // ── rendering ─────────────────────────────────────────────────────────────
-  sync() {
+  sync(event = null) {
     const b = this.battle
     const enemy = b.enemy
     const active = b.active
     if (!enemy || !active) return
+
+    if (event?.side === 'player' && Number.isFinite(event.hp)) this.displayHp.player = event.hp
+    if (event?.side === 'enemy' && Number.isFinite(event.hp)) this.displayHp.enemy = event.hp
+    if (event?.type === 'player-switch') this.displayHp.player = event.hp
+    if (event?.type === 'enemy-switch') this.displayHp.enemy = event.hp
+    if (event?.type === 'revive' && event.targetUid === active.uid) this.displayHp.player = event.hp
 
     if (this.enemySpriteId !== enemy.speciesId) {
       this.enemySpriteId = enemy.speciesId
@@ -168,23 +178,25 @@ export class BattleUI {
     const pSp = getMonster(active.speciesId)
     const eMax = maxHpOf(enemy)
     const pMax = maxHpOf(active)
+    const enemyHp = this.displayHp?.enemy ?? enemy.hp
+    const playerHp = this.displayHp?.player ?? active.hp
 
     this.enemyName.textContent = enemy.nickname || eSp.name
     this.enemyLv.textContent = `Lv.${enemy.level}`
-    this.enemyHpText.textContent = `${Math.max(0, Math.ceil(enemy.hp))} / ${eMax}`
+    this.enemyHpText.textContent = `${Math.max(0, Math.ceil(enemyHp))} / ${eMax}`
     this.enemyHpMax.textContent = 'HP'
-    this.enemyHpFill.style.width = `${Math.max(0, enemy.hp / Math.max(1, eMax)) * 100}%`
-    this.enemyHpFill.className = `battle-hp-fill ${enemy.hp / eMax < 0.22 ? 'bad' : enemy.hp / eMax < 0.5 ? 'warn' : ''}`
+    this.enemyHpFill.style.width = `${Math.max(0, enemyHp / Math.max(1, eMax)) * 100}%`
+    this.enemyHpFill.className = `battle-hp-fill ${enemyHp / eMax < 0.22 ? 'bad' : enemyHp / eMax < 0.5 ? 'warn' : ''}`
     this.enemyMeta.innerHTML = ''
     this.enemyMeta.append(elementBadge(eSp.element, true), rarityBadge(eSp.rarity))
     if (enemy.status) this.enemyMeta.append(statusBadge(enemy.status))
 
     this.playerName.textContent = active.nickname
     this.playerLv.textContent = `Lv.${active.level}`
-    this.playerHpText.textContent = `${Math.max(0, Math.ceil(active.hp))} / ${pMax}`
+    this.playerHpText.textContent = `${Math.max(0, Math.ceil(playerHp))} / ${pMax}`
     this.playerHpMax.textContent = 'HP'
-    this.playerHpFill.style.width = `${Math.max(0, active.hp / Math.max(1, pMax)) * 100}%`
-    this.playerHpFill.className = `battle-hp-fill ${active.hp / pMax < 0.22 ? 'bad' : active.hp / pMax < 0.5 ? 'warn' : ''}`
+    this.playerHpFill.style.width = `${Math.max(0, playerHp / Math.max(1, pMax)) * 100}%`
+    this.playerHpFill.className = `battle-hp-fill ${playerHp / pMax < 0.22 ? 'bad' : playerHp / pMax < 0.5 ? 'warn' : ''}`
     this.playerMeta.innerHTML = ''
     this.playerMeta.append(elementBadge(pSp.element, true))
     if (active.status) this.playerMeta.append(statusBadge(active.status))
@@ -197,8 +209,8 @@ export class BattleUI {
     this.enemyPlate.textContent = enemy.nickname || eSp.name
     this.playerPlate.textContent = `${active.nickname} · ${active.level}`
 
-    this.enemyCombatant.classList.toggle('fainted', enemy.hp <= 0)
-    this.playerCombatant.classList.toggle('fainted', active.hp <= 0)
+    this.enemyCombatant.classList.toggle('fainted', enemyHp <= 0)
+    this.playerCombatant.classList.toggle('fainted', playerHp <= 0)
     this.turnEl.innerHTML = `<strong>Turn ${Math.max(1, b.turn)}</strong>`
   }
 
@@ -411,11 +423,13 @@ export class BattleUI {
     for (const event of events) {
       if (this.destroyed) return
       this.handleEvent(event)
-      this.sync()
+      this.sync(event)
       await this.wait(this.eventDelay(event))
     }
     if (this.destroyed) return
     this.busy = false
+    this.displayHp.player = this.battle.active.hp
+    this.displayHp.enemy = this.battle.enemy.hp
     this.sync()
     if (this.battle.awaitingSwitch) {
       this.needSwitch = true
@@ -434,7 +448,7 @@ export class BattleUI {
     const base = speed === 'fast' ? 110 : speed === 'relaxed' ? 470 : 255
     switch (event.type) {
       case 'log': return base * 0.8
-      case 'move': return base * 1.05
+      case 'move': return Math.max(380, base * 1.05)
       case 'damage': return base * 1.1
       case 'capture-throw': return 560
       case 'capture-shake': return 720
