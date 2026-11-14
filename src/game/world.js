@@ -17,7 +17,7 @@ export const MAP_H = 132
 export const WORLD_W = MAP_W * TILE
 export const WORLD_H = MAP_H * TILE
 
-const WILD_TARGET_PER_BIOME = 5
+const WILD_TARGET_PER_BIOME = 8
 const T = { GROUND: 0, PATH: 1, WATER: 2, LAVA: 3, BRIDGE: 4, PLAZA: 5, OCEAN: 6, ICE: 7, ASH: 8 }
 
 const LINKS = [
