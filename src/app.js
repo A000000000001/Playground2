@@ -46,11 +46,13 @@ export class GameApp {
     this.near = null
     this.keys = new Set()
     this.mobileKeys = new Set()
+    this.mobileRun = false
     this.playerMoving = false
     this.walkTime = 0
     this.lastTime = performance.now()
     this.playAccumulator = 0
     this.autosaveTimer = null
+    this.saveInterval = null
     this.loop = this.loop.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
@@ -75,7 +77,7 @@ export class GameApp {
       if (this.mode === 'game' && this.state) this.save()
     })
     window.addEventListener('contextmenu', e => {
-      if (e.target.closest('.dpad, .action-pad')) e.preventDefault()
+      if (e.target.closest('.game-shell, .dpad, .action-pad')) e.preventDefault()
     })
   }
 
@@ -122,6 +124,7 @@ export class GameApp {
 
   // ── title flow ─────────────────────────────────────────────────────────────
   showTitle() {
+    this.stopAutosave()
     if (this.battleUI) { this.battleUI.destroy(); this.battleUI = null }
     if (isModalOpen()) closeModal(true)
     this.mode = 'title'
@@ -322,11 +325,13 @@ export class GameApp {
     this.near = this.world.nearestInteraction()
     this.world.encounterCooldown = 2.2
     this.playerMoving = false
+    this.mobileRun = false
     this.walkTime = 0
     this.updatePlayerState()
     this.renderer.centerCamera(this.world.player.x, this.world.player.y)
     this.hud.update()
     this.applySettings()
+    this.startAutosave()
 
     if (fresh || !state.flags.introSeen) this.showIntro()
     else toast({ title: `Welcome back, ${state.player.name}`, text: `${BIOMES[state.player.biome]?.name || 'Aetheria'} · Trainer Lv.${state.player.trainerLevel}`, icon: '✦' })
@@ -354,7 +359,7 @@ export class GameApp {
         ]),
       ]),
       el('div', { class: 'help-grid' }, [
-        helpCard('➜', 'Move', 'WASD / arrows. Shift runs. On mobile use the pad at the lower-left.'),
+        helpCard('➜', 'Move', 'WASD / arrows. Shift runs. On mobile use the pad at the lower-left and tap RUN to sprint.'),
         helpCard('E', 'Interact', 'Talk, gather, challenge Guardians or start a wild battle.'),
         helpCard('P · B · C', 'Party · Bag · Codex', 'Your three most-used screens are always one key away.'),
         helpCard('✎', 'First steps', 'Walk into a wild monster to battle it. Visit the golden “!” in Mossglow Village for your first quest.'),
@@ -369,7 +374,7 @@ export class GameApp {
         closeModal()
         this.afterChange()
         const touch = window.matchMedia?.('(pointer: coarse)').matches
-        toast({ title: 'Greenwood Forest', text: touch ? 'Use the pad to move · tap ACTION to interact' : 'WASD / arrows to move · E to interact', icon: '❧', tone: 'region' })
+        toast({ title: 'Greenwood Forest', text: touch ? 'Pad to move · ACTION to interact · RUN to sprint' : 'WASD / arrows to move · E to interact', icon: '❧', tone: 'region' })
       }, { variant: 'primary', icon: '➜' }),
     })
   }
@@ -415,7 +420,7 @@ export class GameApp {
     this.playerMoving = dx !== 0 || dy !== 0
     if (!this.playerMoving) return
     const length = Math.hypot(dx, dy) || 1
-    const running = this.keys.has('shift')
+    const running = this.keys.has('shift') || this.mobileRun
     const speed = running ? 205 : 118
     this.world.movePlayer((dx / length) * speed * dt, (dy / length) * speed * dt)
     this.walkTime += dt * (running ? 1.55 : 1)
@@ -774,7 +779,17 @@ export class GameApp {
     this.actionBtn.addEventListener('pointerleave', clear)
     const menu = el('button', { class: 'mobile-menu-btn', 'aria-label': 'Menu' }, '☰')
     menu.addEventListener('click', () => this.openMenu())
-    actionPad.append(this.actionBtn, menu)
+    this.runBtn = el('button', {
+      class: 'mobile-run-btn', 'aria-label': 'Toggle sprint', 'aria-pressed': 'false', title: 'Sprint',
+    }, 'RUN')
+    this.runBtn.addEventListener('click', () => {
+      this.mobileRun = !this.mobileRun
+      this.runBtn.classList.toggle('active', this.mobileRun)
+      this.runBtn.setAttribute('aria-pressed', String(this.mobileRun))
+      try { navigator.vibrate?.(8) } catch {}
+    })
+    const subPad = el('div', { class: 'mobile-subpad' }, [this.runBtn, menu])
+    actionPad.append(this.actionBtn, subPad)
 
     wrap.append(dpad, actionPad)
     return wrap
@@ -831,6 +846,24 @@ export class GameApp {
       this.autosaveTimer = null
       this.save()
     }, 900)
+  }
+
+  // Phone browsers can suspend a tab without firing beforeunload. A light
+  // interval keeps exploration progress safe during long sessions.
+  startAutosave() {
+    this.stopAutosave()
+    this.saveInterval = setInterval(() => {
+      if (this.mode === 'game' && this.state?.settings?.autosave && !this.battleUI && !isModalOpen()) {
+        this.save()
+      }
+    }, 20000)
+  }
+
+  stopAutosave() {
+    if (this.saveInterval) {
+      clearInterval(this.saveInterval)
+      this.saveInterval = null
+    }
   }
 
   applySettings() {

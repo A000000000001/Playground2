@@ -39,6 +39,9 @@ export function openModal({ title = '', subtitle = '', eyebrow = '', icon = '', 
   panel.append(head, bodyEl)
   if (footEl) panel.append(footEl)
   backdrop.append(panel)
+  backdrop.addEventListener('click', e => {
+    if (e.target === backdrop) closeModal()
+  })
   modalRoot.append(backdrop)
   requestAnimationFrame(() => backdrop.classList.add('visible'))
   modalState = { open: true, onClose, backdrop }

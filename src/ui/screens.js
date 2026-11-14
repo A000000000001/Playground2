@@ -918,7 +918,7 @@ export class Screens {
     ]))
     content.append(el('div', { class: 'panel-soft settings-note' }, [
       el('p', {}, 'Controls: WASD / Arrow keys to move · Shift to run · E / Space to interact · P party · B bag · C codex · M map · J journal · Esc menu.'),
-      el('p', {}, 'Mobile: use the virtual joystick and the action button in the lower-right.'),
+      el('p', {}, 'Mobile: use the direction pad at the lower-left, tap ACTION to interact, and RUN to sprint.'),
     ]))
     return root
   }
