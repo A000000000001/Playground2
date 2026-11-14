@@ -17,6 +17,7 @@ export class WorldRenderer {
     this.time = 0
     this.weather = []
     this.weatherBiome = null
+    this.gardenSpriteCache = new WeakMap()
     this.tintCanvas = document.createElement('canvas')
     this.tintCtx = this.tintCanvas.getContext('2d')
     this.resize()
@@ -177,13 +178,35 @@ export class WorldRenderer {
     }
   }
 
+  gardenPixelSprite(sprite) {
+    if (this.gardenSpriteCache.has(sprite)) return this.gardenSpriteCache.get(sprite)
+    const lowRes = document.createElement('canvas')
+    lowRes.width = 20
+    lowRes.height = 20
+    const lowCtx = lowRes.getContext('2d')
+    lowCtx.imageSmoothingEnabled = false
+    lowCtx.drawImage(sprite, 0, 0, 20, 20)
+
+    const pixelSprite = document.createElement('canvas')
+    pixelSprite.width = 40
+    pixelSprite.height = 40
+    const pixelCtx = pixelSprite.getContext('2d')
+    pixelCtx.imageSmoothingEnabled = false
+    pixelCtx.drawImage(lowRes, 0, 0, 40, 40)
+    this.gardenSpriteCache.set(sprite, pixelSprite)
+    return pixelSprite
+  }
+
   drawWild(ctx, w, big = false) {
     const t = this.time * 2 + (w.bob || 0)
     const bob = Math.sin(t) * (big ? 2 : 1.4)
     const scale = big ? 2.05 : 1.15
     const sprite = monsterSprite(w.speciesId)
+    // Greenwood Forest is the starter garden: regular wild sprites use 2×2
+    // pixel blocks there, while boss/mythic sprites keep their original detail.
+    const renderedSprite = !big && w.biome === 'forest' ? this.gardenPixelSprite(sprite) : sprite
     const flip = w.dir === 'left'
-    const drawSprite = flip ? this.flipped(sprite) : sprite
+    const drawSprite = flip ? this.flipped(renderedSprite) : renderedSprite
     const wSize = 40 * scale, hSize = 40 * scale
     const baseX = w.x - wSize / 2
     const baseY = w.y + 8 - hSize + bob
