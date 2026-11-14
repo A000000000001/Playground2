@@ -77,6 +77,8 @@ export class HUD {
       const avatar = el('img', { class: 'trainer-avatar pixel-sprite', alt: 'trainer' })
       avatar.src = app.playerAvatarUrl()
       this.trainerRegion = el('div', { class: 'trainer-region' })
+      this.trainerHpFill = el('div', { class: 'trainer-hp-fill' })
+      this.trainerHp = el('div', { class: 'trainer-hp', title: 'Lead monster HP' }, [this.trainerHpFill])
       const info = el('div', { class: 'trainer-copy' }, [
         el('div', { class: 'trainer-line' }, [
           el('strong', {}, p.name),
@@ -84,6 +86,7 @@ export class HUD {
         ]),
         el('div', { class: 'trainer-title-line' }, trainerTitle(p.trainerLevel)),
         this.trainerRegion,
+        this.trainerHp,
         el('div', { class: 'trainer-sub' }, [
           el('span', { class: 'money' }, `◈ ${p.money.toLocaleString()}`),
           el('span', { class: 'badges' }, `${Object.values(state.flags.bosses).filter(Boolean).length} / 8 guardians`),
@@ -97,6 +100,17 @@ export class HUD {
     if (this.trainerRegion && this.last.regionLineKey !== regionLineKey) {
       this.last.regionLineKey = regionLineKey
       this.trainerRegion.textContent = `${formatTime(state.time.minutes)} ${night ? '☾' : '·'} ${biome.name.split(' ')[0]}`
+    }
+
+    // Compact lead HP bar lives inside the trainer card on phones, so the old
+    // floating monster dock can stay out of the play area.
+    const leadHpPct = lead ? Math.max(0, Math.min(1, lead.hp / maxHpOf(lead))) : 0
+    const leadHpKey = lead ? `${lead.uid}:${lead.hp}:${maxHpOf(lead)}` : 'none'
+    if (this.trainerHpFill && this.last.leadHpKey !== leadHpKey) {
+      this.last.leadHpKey = leadHpKey
+      this.trainerHpFill.style.width = `${leadHpPct * 100}%`
+      this.trainerHpFill.className = `trainer-hp-fill ${leadHpPct > 0.5 ? '' : leadHpPct > 0.22 ? 'warn' : 'bad'}`
+      this.trainerHp.title = lead ? `${lead.nickname} · ${Math.max(0, Math.ceil(lead.hp))} / ${maxHpOf(lead)} HP` : 'No lead monster'
     }
 
     const regionKey = `${biome.id}|${night}`

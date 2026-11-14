@@ -952,11 +952,12 @@ export class Screens {
           footer: el('div', { class: 'row gap end' }, [
             button('Leave', closeModal, { variant: 'ghost' }),
             button('Heal Party', () => {
-              const res = healAllAtNpc(state)
-              if (isNight(state.time.minutes)) { state.time.minutes = 6 * 60; state.time.day += 1 }
+              const wasNight = isNight(state.time.minutes)
+              healAllAtNpc(state)
+              if (wasNight) { state.time.minutes = 6 * 60; state.time.day += 1 }
               this.app.afterChange()
               this.app.refreshHud()
-              toast({ title: 'Fully healed', text: isNight(state.time.minutes) ? 'You rested until dawn.' : 'Your party is ready.', icon: '✚', tone: 'success' })
+              toast({ title: 'Fully healed', text: wasNight ? 'You rested until dawn.' : 'Your party is ready.', icon: '✚', tone: 'success' })
               closeModal()
             }, { variant: 'primary', icon: '✚' }),
           ]),

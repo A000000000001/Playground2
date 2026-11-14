@@ -390,8 +390,8 @@ a { color: var(--gold); }
 /* ==========================================================================
    Game shell + HUD
    ========================================================================== */
-.game-shell { position: fixed; inset: 0; overflow: hidden; background: #0a1112; }
-#game-canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+.game-shell { position: fixed; inset: 0; overflow: hidden; background: #0a1112; touch-action: none; -webkit-user-select: none; user-select: none; }
+#game-canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; display: block; touch-action: none; }
 
 .hud-layer {
   position: absolute; inset: 0; z-index: 10;
@@ -427,6 +427,10 @@ a { color: var(--gold); }
 .trainer-sub { display: flex; gap: 10px; margin-top: 2px; font-family: var(--mono); font-size: 9.5px; color: var(--ink-soft); }
 .trainer-sub .money { color: var(--gold); }
 .trainer-region { display: none; font-family: var(--mono); font-size: 7.5px; letter-spacing: 0.02em; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trainer-hp { display: none; width: 100%; height: 3px; margin-top: 3px; border-radius: 99px; background: rgba(0,0,0,0.5); overflow: hidden; }
+.trainer-hp-fill { height: 100%; border-radius: 99px; background: #78d9a4; transition: width 0.25s ease, background 0.25s ease; }
+.trainer-hp-fill.warn { background: #ffd36e; }
+.trainer-hp-fill.bad { background: #ff7a7a; }
 
 .hud-center {
   display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -1211,6 +1215,7 @@ a { color: var(--gold); }
   .trainer-title-line { display: none; }
   .trainer-sub { display: none; }
   .trainer-region { display: block; font-size: 7px; letter-spacing: 0; }
+  .trainer-hp { display: block; }
   .hud-center { display: none; }
   .hud-quest {
     position: absolute;
@@ -1222,18 +1227,12 @@ a { color: var(--gold); }
   .hud-quest strong { font-size: 9.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .quest-obj { font-size: 8px; }
   .hud-lead { display: none; }
-  .party-dock {
-    position: absolute;
-    top: calc(62px + env(safe-area-inset-top));
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-    padding: 4px 6px;
-    background: linear-gradient(180deg, rgba(17,27,28,0.82), rgba(10,16,17,0.78));
-  }
+  /* The party dock was covering the middle of the mobile viewport. Party is
+     always one tap away in the HUD, and lead HP now lives in the trainer card. */
+  .party-dock { display: none; }
   .hud-hint { display: none; }
   .hud-bottom { margin-bottom: 58px; align-items: flex-start; }
-  #toast-layer { top: calc(130px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left)); right: calc(12px + env(safe-area-inset-right)); align-items: stretch; max-width: none; }
+  #toast-layer { top: calc(66px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left)); right: calc(12px + env(safe-area-inset-right)); align-items: stretch; max-width: none; }
   .toast { width: 100%; }
   .dock-slot { width: 40px; height: 48px; padding: 2px 3px 2px; }
   .dock-sprite { width: 27px; height: 27px; }
@@ -1326,9 +1325,6 @@ a { color: var(--gold); }
   .trainer-line strong { font-size: 10.5px; }
   .trainer-lv { font-size: 7px; }
   .trainer-region { font-size: 6.5px; }
-  .party-dock { top: calc(56px + env(safe-area-inset-top)); }
-  .party-dock .dock-slot:nth-child(n+5) { display: none; }
-  .party-dock .dock-slot.empty { display: none; }
   .hud-quest { display: flex; max-width: 172px; bottom: calc(222px + env(safe-area-inset-bottom)); padding: 6px 8px; }
   .hud-quest .quest-obj { display: none; }
   .hud-quest strong { font-size: 9px; }
@@ -1356,21 +1352,19 @@ a { color: var(--gold); }
   .hud-nav .nav-btn { min-width: 32px; padding: 4px; }
   .hud-trainer { max-width: 150px; padding: 4px 7px 4px 4px; }
   .trainer-avatar { width: 28px; height: 28px; }
-  .party-dock { top: calc(56px + env(safe-area-inset-top)); }
-  .party-dock .dock-slot { width: 36px; height: 42px; }
-  .party-dock .dock-sprite { width: 24px; height: 24px; }
+  .party-dock { display: none; }
   .hud-quest { display: none; }
 
-  .dpad { left: calc(14px + env(safe-area-inset-left)); bottom: calc(14px + env(safe-area-inset-bottom)); width: 108px; height: 108px; }
-  .dpad button { width: 36px; height: 36px; border-radius: 10px; font-size: 13px; }
-  .dpad .dpad-up { left: 36px; top: 0; }
-  .dpad .dpad-left { left: 0; top: 36px; }
-  .dpad .dpad-right { left: 72px; top: 36px; }
-  .dpad .dpad-down { left: 36px; top: 72px; }
+  .dpad { left: calc(14px + env(safe-area-inset-left)); bottom: calc(14px + env(safe-area-inset-bottom)); width: 132px; height: 132px; }
+  .dpad button { width: 44px; height: 44px; border-radius: 12px; font-size: 15px; }
+  .dpad .dpad-up { left: 44px; top: 0; }
+  .dpad .dpad-left { left: 0; top: 44px; }
+  .dpad .dpad-right { left: 88px; top: 44px; }
+  .dpad .dpad-down { left: 44px; top: 88px; }
   .action-pad { right: calc(14px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); gap: 6px; }
-  .action-btn { width: 62px; height: 62px; font-size: 7.5px; }
-  .action-btn .action-glyph { font-size: 17px; }
-  .mobile-menu-btn { width: 36px; height: 36px; font-size: 14px; }
+  .action-btn { width: 68px; height: 68px; font-size: 7.5px; }
+  .action-btn .action-glyph { font-size: 19px; }
+  .mobile-menu-btn { width: 38px; height: 38px; font-size: 14px; }
   .mobile-hint { font-size: 7px; }
 
   .battle-top { padding: 5px 10px; }

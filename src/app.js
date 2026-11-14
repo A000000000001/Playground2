@@ -576,6 +576,10 @@ export class GameApp {
   canOpenScreen() {
     return this.mode === 'game' && !this.battleUI && this.screens
   }
+
+  get uiBlocked() {
+    return isModalOpen() || !!this.battleUI
+  }
   openParty(tab = 'party') { if (this.canOpenScreen()) this.screens.openParty(tab) }
   openDex(biome = 'all') { if (this.canOpenScreen()) this.screens.openDex(biome) }
   openBag(tab = 'items') { if (this.canOpenScreen()) this.screens.openBag(tab) }
@@ -808,6 +812,17 @@ export class GameApp {
     if (!this.state || this.mode !== 'game') return false
     this.updatePlayerState()
     return saveGame(this.state)
+  }
+
+  // Called by the pause menu's "Delete Save" action. The screens layer clears
+  // the modal and returns to the title afterwards.
+  deleteSave() {
+    if (this.autosaveTimer) {
+      clearTimeout(this.autosaveTimer)
+      this.autosaveTimer = null
+    }
+    eraseSave()
+    return true
   }
 
   debounceSave() {
