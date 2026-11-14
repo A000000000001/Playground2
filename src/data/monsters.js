@@ -24,13 +24,13 @@ add(
   // ══ GREENWOOD FOREST ══════════════════════════════════════════════════════
   M('sprigling', 'Sprigling', 'nature', 'forest', 'common',
     [46, 13, 12, 14, 13, 12], 'overgrow',
-    [[1, 'tackle'], [1, 'vine_whip'], [7, 'root_snare'], [11, 'leech_seed'], [16, 'synthesis'], [22, 'thorn_burst']],
+    [[1, 'tackle'], [1, 'vine_whip'], [7, 'root_snare'], [11, 'leech_seed'], [16, 'synthesis'], [22, 'thorn_burst'], [27, 'pollen_dance']],
     [{ type: 'level', level: 16, to: 'mosswarden' }],
     L('quad', 1, 'leaf,ears,tail'), 'A shy forest fawn that grows a fresh leaf each spring. It hums to wake sleeping flowers.'),
 
   M('mosswarden', 'Mosswarden', 'nature', 'forest', 'uncommon',
     [72, 27, 25, 30, 26, 22], 'overgrow',
-    [[1, 'tackle'], [1, 'vine_whip'], [1, 'root_snare'], [16, 'leaf_blade'], [24, 'synthesis'], [30, 'petal_storm']],
+    [[1, 'tackle'], [1, 'vine_whip'], [1, 'root_snare'], [16, 'leaf_blade'], [24, 'synthesis'], [30, 'petal_storm'], [36, 'pollen_dance']],
     [{ type: 'level', level: 34, to: 'sylvanox' }],
     L('quad', 2, 'leaf,antlers,tail'), 'Ancient groves grow around its antlers. Woodland creatures shelter beneath the mossy canopy.'),
 
@@ -47,7 +47,7 @@ add(
 
   M('shellbark', 'Shellbark', 'nature', 'forest', 'uncommon',
     [86, 30, 38, 20, 28, 18], 'armored',
-    [[1, 'tackle'], [1, 'leaf_blade'], [1, 'iron_guard'], [20, 'root_snare'], [26, 'body_slam']],
+    [[1, 'tackle'], [1, 'leaf_blade'], [1, 'iron_guard'], [20, 'root_snare'], [26, 'body_slam'], [32, 'rest']],
     [], L('quad', 2, 'shell,spikes'), 'A walking fortress of bark. Entire bird families nest in the crevices of its back.'),
 
   M('fluffinch', 'Fluffinch', 'nature', 'forest', 'common',
@@ -74,7 +74,7 @@ add(
 
   M('bramblet', 'Bramblet', 'nature', 'forest', 'common',
     [48, 17, 14, 11, 10, 13], 'predator',
-    [[1, 'tackle'], [1, 'vine_whip'], [8, 'leer'], [12, 'root_snare'], [18, 'leaf_blade']],
+    [[1, 'tackle'], [1, 'vine_whip'], [8, 'leer'], [12, 'root_snare'], [18, 'leaf_blade'], [23, 'focus_strike']],
     [{ type: 'level', level: 17, to: 'brambleclaw' }],
     L('biped', 1, 'spikes,ears,tail'), 'A prickly little scrapper that picks fights with anything rounder than itself.'),
 
@@ -91,13 +91,13 @@ add(
   // ══ EMBER VOLCANO ═════════════════════════════════════════════════════════
   M('cindercub', 'Cindercub', 'flame', 'volcano', 'common',
     [48, 15, 12, 14, 12, 13], 'blaze',
-    [[1, 'tackle'], [1, 'ember'], [7, 'growl'], [11, 'smolder'], [17, 'flame_fang'], [23, 'scorch_wave']],
+    [[1, 'tackle'], [1, 'ember'], [7, 'growl'], [11, 'smolder'], [17, 'flame_fang'], [23, 'scorch_wave'], [28, 'fire_spin']],
     [{ type: 'level', level: 16, to: 'magmaw' }],
     L('quad', 1, 'ears,tail'), 'A soot-furred cub that sneezes sparks. Volcano villagers use it to light their hearths.'),
 
   M('magmaw', 'Magmaw', 'flame', 'volcano', 'uncommon',
     [74, 30, 24, 32, 25, 23], 'blaze',
-    [[1, 'ember'], [1, 'flame_fang'], [16, 'scorch_wave'], [24, 'magma_burst'], [30, 'inferno']],
+    [[1, 'ember'], [1, 'flame_fang'], [16, 'scorch_wave'], [24, 'magma_burst'], [30, 'inferno'], [36, 'ash_blast']],
     [{ type: 'level', level: 36, to: 'volcanix' }],
     L('quad', 2, 'horns,tail,spikes'), 'Its jaw glows like a furnace door. Magmaw swallows stones and spits them back as glass.'),
 
@@ -114,7 +114,7 @@ add(
 
   M('flarewing', 'Flarewing', 'flame', 'volcano', 'uncommon',
     [66, 25, 20, 34, 26, 28], 'swift',
-    [[1, 'ember'], [1, 'wind_slash'], [1, 'quick_jab'], [22, 'scorch_wave'], [28, 'inferno']],
+    [[1, 'ember'], [1, 'wind_slash'], [1, 'quick_jab'], [22, 'scorch_wave'], [28, 'inferno'], [34, 'fire_spin']],
     [{ type: 'item', item: 'ember_heart', level: 28, to: 'pyroclast' }],
     L('bird', 2, 'wings,crest,tail'), 'It rides heat currents above the caldera, leaving a trail of sparks like falling stars.'),
 
@@ -148,13 +148,13 @@ add(
   // ══ FROZEN MOUNTAINS ══════════════════════════════════════════════════════
   M('snowpup', 'Snowpup', 'frost', 'frozen', 'common',
     [47, 14, 12, 13, 12, 14], 'thick_hide',
-    [[1, 'tackle'], [1, 'frost_shard'], [7, 'growl'], [12, 'ice_fang'], [18, 'chilling_song']],
+    [[1, 'tackle'], [1, 'frost_shard'], [7, 'growl'], [12, 'ice_fang'], [18, 'chilling_song'], [24, 'aurora_burst']],
     [{ type: 'level', level: 16, to: 'frostfang' }],
     L('quad', 1, 'ears,tail'), 'A puffball pup that naps in snowdrifts. Its body heat melts a perfect circle around it.'),
 
   M('frostfang', 'Frostfang', 'frost', 'frozen', 'uncommon',
     [73, 29, 26, 28, 25, 24], 'thick_hide',
-    [[1, 'frost_shard'], [1, 'ice_fang'], [16, 'glacier_slam'], [24, 'blizzard'], [30, 'frozen_heart']],
+    [[1, 'frost_shard'], [1, 'ice_fang'], [16, 'glacier_slam'], [24, 'blizzard'], [30, 'frozen_heart'], [36, 'aurora_burst']],
     [{ type: 'level', level: 36, to: 'glacierex' }],
     L('quad', 2, 'horns,tail,mane'), 'It hunts by scent across whiteout storms. Its breath freezes tracks solid behind it.'),
 
@@ -188,7 +188,7 @@ add(
 
   M('blizzure', 'Blizzure', 'frost', 'frozen', 'rare',
     [70, 22, 20, 40, 30, 35], 'chill',
-    [[1, 'blizzard'], [1, 'lullaby'], [1, 'icicle_spear'], [24, 'chilling_song'], [32, 'solar_flare']],
+    [[1, 'blizzard'], [1, 'lullaby'], [1, 'icicle_spear'], [24, 'chilling_song'], [32, 'solar_flare'], [38, 'aurora_burst']],
     [], L('bird', 2, 'wings,crest,plume,orbs'), 'It summons whiteout blizzards when angry. Locals leave offerings of silver fish.'),
 
   M('snowmole', 'Snowmole', 'frost', 'frozen', 'common',
@@ -205,7 +205,7 @@ add(
   // ══ CRYSTAL DESERT ════════════════════════════════════════════════════════
   M('sandlet', 'Sandlet', 'earth', 'desert', 'common',
     [46, 14, 14, 11, 11, 15], 'earthy',
-    [[1, 'tackle'], [1, 'pebble_toss'], [7, 'sand_tomb'], [12, 'sandstorm'], [18, 'crystal_lance']],
+    [[1, 'tackle'], [1, 'pebble_toss'], [7, 'sand_tomb'], [12, 'sandstorm'], [18, 'crystal_lance'], [24, 'fault_line']],
     [{ type: 'level', level: 17, to: 'duneclaw' }],
     L('quad', 1, 'ears,tail'), 'A desert fox made of warm sand. It leaves flower-shaped footprints that vanish by noon.'),
 
@@ -222,7 +222,7 @@ add(
 
   M('crystalisk', 'Crystalisk', 'earth', 'desert', 'common',
     [52, 13, 20, 16, 18, 10], 'earthy',
-    [[1, 'tackle'], [1, 'pebble_toss'], [8, 'iron_guard'], [14, 'crystal_lance'], [22, 'stone_skin']],
+    [[1, 'tackle'], [1, 'pebble_toss'], [8, 'iron_guard'], [14, 'crystal_lance'], [22, 'stone_skin'], [28, 'fault_line']],
     [{ type: 'level', level: 26, to: 'prismadon' }],
     L('serpent', 1, 'spikes,gem'), 'A small basking lizard with crystal scales. It can refract sunlight into blinding sigils.'),
 
@@ -250,7 +250,7 @@ add(
 
   M('dunehowl', 'Dunehowl', 'earth', 'desert', 'rare',
     [68, 30, 22, 22, 20, 40], 'predator',
-    [[1, 'sand_tomb'], [1, 'crystal_lance'], [1, 'agility'], [21, 'earthquake'], [28, 'geo_break']],
+    [[1, 'sand_tomb'], [1, 'crystal_lance'], [1, 'agility'], [21, 'earthquake'], [28, 'geo_break'], [34, 'fault_line']],
     [], L('quad', 2, 'horns,mane,tail'), 'The desert\'s dusk hunter. Its cry bends the dunes into new shapes overnight.'),
 
   // ══ SHADOW SWAMP ══════════════════════════════════════════════════════════
@@ -273,7 +273,7 @@ add(
 
   M('shadeling', 'Shadeling', 'shadow', 'swamp', 'common',
     [42, 15, 10, 17, 12, 19], 'shadow_veil',
-    [[1, 'tackle'], [1, 'shadow_bolt'], [7, 'leer'], [12, 'curse'], [18, 'shadow_fang']],
+    [[1, 'tackle'], [1, 'shadow_bolt'], [7, 'leer'], [12, 'curse'], [18, 'shadow_fang'], [24, 'wraith_claw']],
     [{ type: 'level', level: 21, to: 'umbrafang' }],
     L('spirit', 1, 'ears,tail'), 'A scrap of living shadow that hides under beds and in coat pockets. Mostly harmless. Mostly.'),
 
@@ -325,7 +325,7 @@ add(
 
   M('glyphbeast', 'Glyphbeast', 'light', 'ruins', 'uncommon',
     [74, 24, 32, 38, 30, 20], 'mystic',
-    [[1, 'spark'], [1, 'prism_flash'], [1, 'crystal_lance'], [21, 'radiant_beam'], [28, 'holy_light']],
+    [[1, 'spark'], [1, 'prism_flash'], [1, 'crystal_lance'], [21, 'radiant_beam'], [28, 'holy_light'], [35, 'dawn_blade']],
     [{ type: 'location', biome: 'ruins', level: 35, to: 'arcanolith' }],
     L('golem', 2, 'gem,orbs,eyes'), 'Ancient glyphs crawl across its surface, rewriting themselves into prophecies as it walks.'),
 
@@ -336,7 +336,7 @@ add(
 
   M('cogpup', 'Cogpup', 'earth', 'ruins', 'common',
     [48, 16, 18, 8, 12, 13], 'sturdy',
-    [[1, 'tackle'], [1, 'pebble_toss'], [8, 'iron_guard'], [13, 'bite'], [19, 'body_slam']],
+    [[1, 'tackle'], [1, 'pebble_toss'], [8, 'iron_guard'], [13, 'bite'], [19, 'body_slam'], [25, 'mega_punch']],
     [{ type: 'level', level: 20, to: 'gearhound' }],
     L('quad', 1, 'ears,gear'), 'A clockwork puppy of unknown origin. It retrieves lost bolts and buries them for later.'),
 
@@ -359,7 +359,7 @@ add(
 
   M('oraclewing', 'Oraclewing', 'light', 'ruins', 'rare',
     [66, 18, 18, 42, 34, 36], 'radiant',
-    [[1, 'radiant_beam'], [1, 'prism_flash'], [1, 'lullaby'], [24, 'solar_flare'], [32, 'holy_light']],
+    [[1, 'radiant_beam'], [1, 'prism_flash'], [1, 'lullaby'], [24, 'solar_flare'], [32, 'holy_light'], [38, 'dawn_blade']],
     [], L('bug', 2, 'wings,antenna,orbs,crown'), 'Its wing patterns rearrange into fragments of the future. Most of them are about lunch.'),
 
   M('relicrawl', 'Relicrawl', 'earth', 'ruins', 'common',
@@ -370,7 +370,7 @@ add(
 
   M('tombwarden', 'Tombwarden', 'earth', 'ruins', 'uncommon',
     [84, 30, 40, 26, 30, 12], 'sturdy',
-    [[1, 'rock', 'stone'], [1, 'earthquake'], [1, 'stone_skin'], [27, 'crystal_lance'], [34, 'recover']],
+    [[1, 'iron_guard'], [1, 'earthquake'], [1, 'stone_skin'], [27, 'crystal_lance'], [34, 'recover']],
     [], L('golem', 2, 'spikes,gem,mask'), 'A silent keeper of the tombs. It has counted every grain of dust in the ruins. Twice.'),
 
   // ══ DRAGON VALLEY ═════════════════════════════════════════════════════════
@@ -382,7 +382,7 @@ add(
 
   M('drakeon', 'Drakeon', 'dragon', 'dragon', 'uncommon',
     [78, 34, 28, 30, 26, 26], 'dragon_heart',
-    [[1, 'dragon_breath'], [1, 'claw_slash'], [1, 'dragon_dance'], [20, 'wyrm_wave'], [28, 'ancient_roar']],
+    [[1, 'dragon_breath'], [1, 'claw_slash'], [1, 'dragon_dance'], [20, 'wyrm_wave'], [28, 'ancient_roar'], [34, 'scale_rend']],
     [{ type: 'level', level: 38, to: 'dracolord' }],
     L('dragon', 2, 'horns,wings,tail'), 'A young valley drake. It practices roaring at cliffs and is embarrassed when they echo back.'),
 
@@ -399,12 +399,12 @@ add(
 
   M('scytheraptor', 'Scytheraptor', 'dragon', 'dragon', 'rare',
     [74, 42, 24, 20, 20, 42], 'predator',
-    [[1, 'claw_slash'], [1, 'wind_slash'], [1, 'agility'], [23, 'dragon_dance'], [30, 'last_resort']],
+    [[1, 'claw_slash'], [1, 'wind_slash'], [1, 'agility'], [23, 'dragon_dance'], [30, 'last_resort'], [36, 'scale_rend']],
     [], L('bird', 2, 'claws,crest,mane,tail'), 'Its wing-claws can split a boulder. It sharpens them on the valley\'s ancient standing stones.'),
 
   M('dracoil', 'Dracoil', 'dragon', 'dragon', 'rare',
     [60, 20, 18, 24, 20, 18], 'ancient_power',
-    [[1, 'dragon_breath'], [1, 'bite'], [1, 'coil'], [16, 'wyrm_wave'], [24, 'dragon_dance']],
+    [[1, 'dragon_breath'], [1, 'bite'], [1, 'tail_swipe'], [16, 'wyrm_wave'], [24, 'dragon_dance']],
     [{ type: 'item', item: 'dragon_scale', level: 30, to: 'hydrarch' }, { type: 'level', level: 40, to: 'dracolord' }],
     L('serpent', 2, 'horns,fins,tail'), 'A river serpent with a dragon\'s ambition. It practices flying by throwing itself off small waterfalls.'),
 
@@ -415,7 +415,7 @@ add(
 
   M('bonewyrm', 'Bonewyrm', 'shadow', 'dragon', 'rare',
     [88, 44, 36, 38, 30, 30], 'soul_guard',
-    [[1, 'shadow_fang'], [1, 'claw_slash'], [1, 'curse'], [26, 'dark_pulse'], [34, 'nightmare']],
+    [[1, 'shadow_fang'], [1, 'claw_slash'], [1, 'curse'], [26, 'dark_pulse'], [34, 'nightmare'], [40, 'wraith_claw']],
     [], L('serpent', 2, 'bones,horns,tail'), 'The skeleton of a dragon that refused to stop being one. It guards the valley\'s deepest ossuary.'),
 
   // ══ CELESTIAL ISLAND ══════════════════════════════════════════════════════
@@ -433,7 +433,7 @@ add(
 
   M('celestag', 'Celestag', 'light', 'celestial', 'epic',
     [106, 36, 40, 56, 48, 40], 'radiant',
-    [[1, 'solar_flare'], [1, 'radiant_beam'], [1, 'holy_light'], [32, 'solar_flare'], [40, 'draco_meteor']],
+    [[1, 'solar_flare'], [1, 'radiant_beam'], [1, 'holy_light'], [32, 'dawn_blade'], [40, 'moonbeam'], [48, 'draco_meteor']],
     [], L('quad', 3, 'antlers,crown,orbs,tail'), 'The celestial hart. It carries a small, patient galaxy between its antlers.', wild),
 
   M('cloudjelly', 'Cloudjelly', 'light', 'celestial', 'common',
@@ -460,13 +460,13 @@ add(
 
   M('galekit', 'Galekit', 'storm', 'celestial', 'common',
     [44, 13, 12, 17, 14, 20], 'storm_charge',
-    [[1, 'tackle'], [1, 'static_jolt'], [8, 'growl'], [13, 'wind_slash'], [19, 'volt_ring']],
+    [[1, 'tackle'], [1, 'static_jolt'], [8, 'growl'], [13, 'wind_slash'], [19, 'volt_ring'], [25, 'thunderclap']],
     [{ type: 'level', level: 23, to: 'tempestrine' }],
     L('quad', 1, 'ears,tuft,tail'), 'A kitten woven from a summer breeze. It sneezes tiny thunderstorms when nervous.'),
 
   M('tempestrine', 'Tempestrine', 'storm', 'celestial', 'rare',
     [78, 26, 22, 40, 30, 36], 'storm_charge',
-    [[1, 'thunder_fang'], [1, 'gale_force'], [1, 'tailwind'], [25, 'thunderstorm'], [32, 'volt_ring']],
+    [[1, 'thunder_fang'], [1, 'gale_force'], [1, 'tailwind'], [25, 'thunderstorm'], [32, 'volt_ring'], [38, 'thunderclap']],
     [], L('quad', 2, 'horns,mane,tail,orbs'), 'A storm made elegant. Its tail leaves a trail of ionized starlight.'),
 
   // ══ LEGENDARIES ═══════════════════════════════════════════════════════════
@@ -510,10 +510,6 @@ add(
     [[1, 'solar_flare'], [1, 'radiant_beam'], [1, 'holy_light'], [54, 'prism_flash'], [62, 'draco_meteor']],
     [], L('bird', 3, 'wings,crest,crown,plume'), 'The Aurora Sovereign. Its wings paint the night sky with colors that have no names.', { ...legendary, catchRate: 0.04 }),
 )
-
-// Fix a data typo in tombwarden's learnset defensively (unknown skill ids fall back).
-MONSTERS.tombwarden.learnset = [[1, 'iron_guard'], [1, 'earthquake'], [1, 'stone_skin'], [27, 'crystal_lance'], [34, 'recover']]
-MONSTERS.dracoil.learnset = [[1, 'dragon_breath'], [1, 'bite'], [1, 'tail_swipe'], [16, 'wyrm_wave'], [24, 'dragon_dance']]
 
 export const MONSTER_LIST = Object.values(MONSTERS)
 export const STARTERS = ['sprigling', 'cindercub', 'snowpup']
