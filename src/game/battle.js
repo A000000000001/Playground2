@@ -6,7 +6,7 @@ import { RARITY, STATUS, effectiveness, effectivenessLabel } from '../data/eleme
 import { getItem, ORB_TIERS } from '../data/items.js'
 import { getPassive } from '../data/passives.js'
 import { addMonster, addItem, recordCatch } from './state.js'
-import { statsOf, maxHpOf, gainXp, evolutionCandidates, addFriendship, performEvolution, createMonster } from './monsters.js'
+import { statsOf, maxHpOf, gainXp, evolutionCandidates, addFriendship, performEvolution, createMonster, knownMovePool } from './monsters.js'
 import { clamp, isNight, pick } from '../core/utils.js'
 
 const STAGE_MULT = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]
@@ -142,7 +142,8 @@ export class Battle {
   }
 
   doMoveTurn(index) {
-    const playerMove = getSkill(this.active.moves[index] || 'tackle')
+    const selectedPlayerMove = knownMovePool(this.active)[index] || getSkill('tackle')
+    const playerMove = selectedPlayerMove.cost <= this.activeEnergy ? selectedPlayerMove : getSkill('tackle')
     const enemyMove = this.chooseEnemyMove()
     const playerPriority = playerMove.priority || 0
     const enemyPriority = enemyMove.priority || 0
@@ -315,7 +316,7 @@ export class Battle {
   useMove(side, moveIndex) {
     const attacker = side === 'player' ? this.active : this.enemy
     const defender = side === 'player' ? this.enemy : this.active
-    const skill = getSkill(attacker.moves[moveIndex] || attacker.moves[0] || 'tackle')
+    const skill = knownMovePool(attacker)[moveIndex] || getSkill('tackle')
     const attackerLabel = side === 'player' ? attacker.nickname : `${getMonster(attacker.speciesId).name}`
     if (attacker.hp <= 0) return
 
@@ -531,7 +532,7 @@ export class Battle {
   }
 
   chooseEnemyMove() {
-    const moves = this.enemy.moves.map((id, index) => ({ skill: getSkill(id), index }))
+    const moves = knownMovePool(this.enemy).map((skill, index) => ({ skill, index }))
     const usable = moves.filter(m => m.skill.cost <= this.enemyEnergy)
     const pool = usable.length ? usable : [{ skill: getSkill('tackle'), index: -1 }]
     const enemyStats = statsOf(this.enemy)
@@ -556,7 +557,7 @@ export class Battle {
       if (this.trainer) score *= 1.08
       if (score > bestScore) { bestScore = score; best = m }
     }
-    return { index: best.index < 0 ? 0 : best.index, skill: best.skill }
+    return { index: best.index, skill: best.skill }
   }
 
   endOfTurn() {

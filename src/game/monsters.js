@@ -8,7 +8,6 @@ import { clamp, uid, pick, randomInt } from '../core/utils.js'
 
 export const MAX_LEVEL = 60
 export const MAX_PARTY = 6
-export const MAX_MOVES = 4
 
 export function xpNeed(level) {
   return Math.floor(28 * Math.pow(level, 1.38) + 18)
@@ -55,20 +54,11 @@ function learnsetAt(speciesId, level) {
 
 function unique(arr) { return [...new Set(arr)] }
 
-function pickInitialMoves(learned) {
-  const damaging = learned.filter(id => getSkill(id).power > 0)
-  let moves = learned.slice(-MAX_MOVES)
-  if (!moves.some(id => getSkill(id).power > 0) && damaging.length) moves[moves.length - 1] = damaging[damaging.length - 1]
-  if (moves.length === 0) moves = ['tackle']
-  return unique(moves).slice(-MAX_MOVES)
-}
-
 export function createMonster(speciesId, level = 5, opts = {}) {
   const sp = getMonster(speciesId)
   const lv = clamp(Math.round(level), 1, MAX_LEVEL)
   const learned = unique([...learnsetAt(speciesId, lv), ...(opts.extraMoves || []), ...(opts.moves || [])])
-  let moves = (opts.moves || pickInitialMoves(learned)).slice(0, MAX_MOVES)
-  if (!moves.length) moves = ['tackle']
+  let moves = learned.length ? learned : ['tackle']
   const personality = opts.personality || pick(PERSONALITY_IDS)
   const monster = {
     uid: opts.uid || uid('mon'),
@@ -80,7 +70,7 @@ export function createMonster(speciesId, level = 5, opts = {}) {
     personality,
     friendship: opts.friendship ?? 35,
     learned,
-    moves: moves.length ? moves : pickInitialMoves(learned),
+    moves,
     status: null,
     statusTurns: 0,
     isEgg: false,
@@ -110,7 +100,7 @@ export function createEgg(parentA, parentB) {
     personality: Math.random() < 0.5 ? parentA.personality : parentB.personality,
     friendship: 60,
     learned: ['tackle', ...inherited],
-    moves: ['tackle', ...inherited].slice(0, MAX_MOVES),
+    moves: ['tackle', ...inherited],
     status: null,
     statusTurns: 0,
     isEgg: true,
@@ -135,7 +125,7 @@ export function hatchEgg(egg) {
     nickname: sp.name,
     nicknameCustom: false,
     learned,
-    moves: unique([...egg.moves, ...pickInitialMoves(learned)]).slice(0, MAX_MOVES),
+    moves: learned,
     hatchSteps: 0,
   }
   monster.hp = maxHpOf(monster)
@@ -154,25 +144,21 @@ export function healParty(state) {
 }
 
 export function syncLearned(monster) {
+  monster.moves ||= []
+  monster.learned ||= [...monster.moves]
   const known = new Set(monster.learned)
   const newSkills = []
   for (const id of learnsetAt(monster.speciesId, monster.level)) {
     if (!known.has(id)) { known.add(id); monster.learned.push(id); newSkills.push(id) }
   }
-  for (const id of newSkills) {
-    if (monster.moves.length < MAX_MOVES) monster.moves.push(id)
-    else {
-      // Auto-upgrade only if the new skill is clearly stronger and replaces a weaker slot.
-      const power = getSkill(id).power
-      const weakest = monster.moves.reduce((a, b) => (getSkill(a).power <= getSkill(b).power ? a : b))
-      if (power > getSkill(weakest).power + 10) monster.moves[monster.moves.indexOf(weakest)] = id
-    }
-  }
+  monster.moves = unique([...monster.moves, ...monster.learned])
   return newSkills
 }
 
 export function gainXp(monster, amount, opts = {}) {
   if (monster.isEgg) return { levels: [], newSkills: [] }
+  monster.moves ||= []
+  monster.learned ||= [...monster.moves]
   const result = { levels: [], newSkills: [], xp: amount }
   if (monster.level >= MAX_LEVEL) return result
   monster.xp += amount
@@ -181,10 +167,7 @@ export function gainXp(monster, amount, opts = {}) {
     monster.xp -= xpNeed(monster.level)
     monster.level++
     result.levels.push(monster.level)
-    const beforeMoves = new Set(monster.moves)
-    for (const id of syncLearned(monster)) {
-      if (!beforeMoves.has(id)) result.newSkills.push({ id, equipped: monster.moves.includes(id) })
-    }
+    for (const id of syncLearned(monster)) result.newSkills.push({ id })
     monster.hp = Math.min(maxHpOf(monster), monster.hp + Math.floor(maxHpOf(monster) * 0.06))
   }
   if (monster.level >= MAX_LEVEL) monster.xp = 0
@@ -230,13 +213,9 @@ export function evolveMonster(monster, evo, state) {
   return result
 }
 
-export function updateMoves(monster, moves) {
-  const valid = moves.filter(id => monster.learned.includes(id)).slice(0, MAX_MOVES)
-  if (valid.length) monster.moves = valid
-}
-
 export function knownMovePool(monster) {
-  return unique([...monster.learned, ...monster.moves]).map(id => getSkill(id))
+  const ids = unique([...(monster.learned || []), ...(monster.moves || [])])
+  return (ids.length ? ids : ['tackle']).map(id => getSkill(id))
 }
 
 export function partyLead(state) {

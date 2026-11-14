@@ -757,7 +757,7 @@ a { color: var(--gold); }
 .passive-row p { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .move-list { display: flex; flex-direction: column; gap: 5px; }
 .move-row { display: grid; grid-template-columns: 30px minmax(0,1fr) auto; gap: 9px; align-items: center; padding: 6px; border: 1px solid rgba(255,255,255,0.05); border-radius: 9px; background: rgba(255,255,255,0.02); }
-.move-row.equipped { background: rgba(126,217,87,0.045); border-color: rgba(126,217,87,0.16); }
+.move-row.available { background: rgba(126,217,87,0.045); border-color: rgba(126,217,87,0.16); }
 .move-copy { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .move-name-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .move-name-row strong { font-size: 12px; }
@@ -1134,7 +1134,7 @@ a { color: var(--gold); }
 .battle-toolbar .btn { flex: 1 1 auto; min-height: 34px; font-size: 11px; }
 .battle-toolbar .btn.active { border-color: rgba(255,226,122,0.5); background: rgba(255,226,122,0.13); color: var(--gold); }
 .battle-panel { display: flex; flex-direction: column; gap: 6px; }
-.battle-move-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.battle-move-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-height: 220px; overflow-y: auto; padding: 1px 3px 1px 1px; }
 .move-btn {
   display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; gap: 8px;
   padding: 7px 9px; border: 1px solid var(--line); border-radius: 9px;

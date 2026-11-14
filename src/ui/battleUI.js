@@ -3,10 +3,9 @@
 
 import { el, button, toast, elementBadge, rarityBadge, statusBadge } from './common.js'
 import { getMonster } from '../data/monsters.js'
-import { getSkill } from '../data/skills.js'
 import { ELEMENTS, STATUS } from '../data/elements.js'
 import { getItem } from '../data/items.js'
-import { maxHpOf } from '../game/monsters.js'
+import { maxHpOf, knownMovePool } from '../game/monsters.js'
 import { Battle, trainerEnemies } from '../game/battle.js'
 import { BIOMES } from '../data/biomes.js'
 import { monsterSprite } from '../render/sprites.js'
@@ -263,8 +262,7 @@ export class BattleUI {
     const b = this.battle
     const active = b.active
     const grid = el('div', { class: 'battle-move-grid' })
-    active.moves.forEach((id, index) => {
-      const skill = getSkill(id)
+    knownMovePool(active).forEach((skill, index) => {
       const e = ELEMENTS[skill.element] || ELEMENTS.none
       const low = skill.cost > b.activeEnergy
       const btn = el('button', {
@@ -281,9 +279,6 @@ export class BattleUI {
       ])
       grid.append(btn)
     })
-    if (!active.moves.length) {
-      grid.append(button('Tackle', () => this.doAction({ type: 'move', index: 0 }), { variant: 'ghost' }))
-    }
     this.panelEl.append(grid)
   }
 
